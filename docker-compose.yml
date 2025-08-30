@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # Frontend React
+  frontend:
+    build:
+      context: ./frontend
+      target: development
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  # Backend FastAPI
+  backend:
+    build:
+      context: ./backend
+      target: development
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - ENVIRONMENT=development
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/relatorios_db
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - DEBUG=true
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # Banco de dados PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=relatorios_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d relatorios_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # Redis para cache (opcional)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+
+  # Nginx como reverse proxy (opcional para produção)
+  nginx:
+    build:
+      context: ./frontend
+      target: production
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
