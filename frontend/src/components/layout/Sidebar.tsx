@@ -8,9 +8,10 @@ import {
   Copy, 
   Settings,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Eye
 } from 'lucide-react';
-import { SidebarProps, NavigationItem } from '../../types/layout';
+import type { SidebarProps, NavigationItem } from '../../types/layout';
 import { useNavigationStore } from '../../stores/navigationStore';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -20,6 +21,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Database,
   Copy,
   Settings,
+  Eye,
 };
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
