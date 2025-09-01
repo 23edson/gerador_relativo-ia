@@ -1,0 +1,501 @@
+import { ReportTemplate, ReportElement, ReportBuilderLayout, ElementPosition, ElementSize } from '../types/report';
+
+// Templates pré-definidos para diferentes tipos de relatórios
+export const reportTemplates: ReportTemplate[] = [
+  {
+    id: 'sales-dashboard',
+    name: 'Dashboard de Vendas',
+    description: 'Template completo para análise de vendas com métricas, gráficos e tabelas',
+    category: 'sales',
+    thumbnail: '/templates/sales-dashboard.png',
+    elements: [
+      {
+        id: 'title',
+        type: 'text',
+        title: 'Dashboard de Vendas',
+        position: { x: 0, y: 0, z: 0 },
+        size: { width: 800, height: 60 },
+        config: {
+          textConfig: {
+            content: 'Dashboard de Vendas - Análise Completa',
+            format: 'plain',
+            fontSize: 24,
+            fontWeight: 'bold',
+            align: 'center',
+            color: '#1F2937',
+          },
+        },
+        data: null,
+        order: 0,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'total-sales',
+        type: 'metric',
+        title: 'Total de Vendas',
+        position: { x: 0, y: 80, z: 0 },
+        size: { width: 200, height: 100 },
+        config: {
+          metricConfig: {
+            value: 0,
+            label: 'Total de Vendas',
+            unit: 'R$',
+            format: 'currency',
+          },
+        },
+        data: null,
+        order: 1,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'sales-chart',
+        type: 'chart',
+        title: 'Vendas por Mês',
+        position: { x: 220, y: 80, z: 0 },
+        size: { width: 400, height: 300 },
+        config: {
+          chartType: 'bar',
+          chartConfig: {
+            chartType: 'bar',
+            xAxis: { field: 'mes', label: 'Mês', type: 'category' },
+            yAxis: { field: 'vendas', label: 'Vendas', type: 'number' },
+            series: [{ field: 'vendas', label: 'Vendas' }],
+            colors: ['#3B82F6'],
+            legend: true,
+            tooltip: true,
+            responsive: true,
+          },
+        },
+        data: null,
+        order: 2,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'sales-table',
+        type: 'table',
+        title: 'Detalhamento de Vendas',
+        position: { x: 0, y: 400, z: 0 },
+        size: { width: 800, height: 300 },
+        config: {
+          tableConfig: {
+            columns: [
+              { field: 'produto', header: 'Produto', type: 'text', sortable: true, filterable: true, width: 200 },
+              { field: 'categoria', header: 'Categoria', type: 'text', sortable: true, filterable: true, width: 150 },
+              { field: 'vendas', header: 'Vendas', type: 'number', sortable: true, filterable: true, width: 100 },
+              { field: 'receita', header: 'Receita', type: 'currency', sortable: true, filterable: true, width: 150 },
+            ],
+            pagination: true,
+            pageSize: 10,
+            sorting: true,
+            filtering: true,
+            exportable: true,
+          },
+        },
+        data: null,
+        order: 3,
+        visible: true,
+        locked: false,
+      },
+    ],
+    layout: {
+      width: 800,
+      height: 800,
+      gridSize: 20,
+      sections: [
+        {
+          id: 'header',
+          title: 'Cabeçalho',
+          type: 'header',
+          elements: ['title'],
+          order: 0,
+          visible: true,
+        },
+        {
+          id: 'metrics',
+          title: 'Métricas',
+          type: 'content',
+          elements: ['total-sales'],
+          order: 1,
+          visible: true,
+        },
+        {
+          id: 'charts',
+          title: 'Gráficos',
+          type: 'content',
+          elements: ['sales-chart'],
+          order: 2,
+          visible: true,
+        },
+        {
+          id: 'tables',
+          title: 'Tabelas',
+          type: 'content',
+          elements: ['sales-table'],
+          order: 3,
+          visible: true,
+        },
+      ],
+      theme: 'light',
+      responsive: true,
+    },
+    tags: ['vendas', 'dashboard', 'métricas', 'gráficos', 'tabelas'],
+  },
+  {
+    id: 'financial-report',
+    name: 'Relatório Financeiro',
+    description: 'Template para relatórios financeiros com análise de receitas e despesas',
+    category: 'financial',
+    thumbnail: '/templates/financial-report.png',
+    elements: [
+      {
+        id: 'financial-title',
+        type: 'text',
+        title: 'Relatório Financeiro',
+        position: { x: 0, y: 0, z: 0 },
+        size: { width: 800, height: 60 },
+        config: {
+          textConfig: {
+            content: 'Relatório Financeiro - Análise de Receitas e Despesas',
+            format: 'plain',
+            fontSize: 24,
+            fontWeight: 'bold',
+            align: 'center',
+            color: '#1F2937',
+          },
+        },
+        data: null,
+        order: 0,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'revenue',
+        type: 'metric',
+        title: 'Receita Total',
+        position: { x: 0, y: 80, z: 0 },
+        size: { width: 200, height: 100 },
+        config: {
+          metricConfig: {
+            value: 0,
+            label: 'Receita Total',
+            unit: 'R$',
+            format: 'currency',
+          },
+        },
+        data: null,
+        order: 1,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'expenses',
+        type: 'metric',
+        title: 'Despesas Totais',
+        position: { x: 220, y: 80, z: 0 },
+        size: { width: 200, height: 100 },
+        config: {
+          metricConfig: {
+            value: 0,
+            label: 'Despesas Totais',
+            unit: 'R$',
+            format: 'currency',
+          },
+        },
+        data: null,
+        order: 2,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'profit',
+        type: 'metric',
+        title: 'Lucro Líquido',
+        position: { x: 440, y: 80, z: 0 },
+        size: { width: 200, height: 100 },
+        config: {
+          metricConfig: {
+            value: 0,
+            label: 'Lucro Líquido',
+            unit: 'R$',
+            format: 'currency',
+          },
+        },
+        data: null,
+        order: 3,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'financial-chart',
+        type: 'chart',
+        title: 'Receitas vs Despesas',
+        position: { x: 0, y: 200, z: 0 },
+        size: { width: 600, height: 400 },
+        config: {
+          chartType: 'line',
+          chartConfig: {
+            chartType: 'line',
+            xAxis: { field: 'mes', label: 'Mês', type: 'category' },
+            yAxis: { field: 'valor', label: 'Valor (R$)', type: 'number' },
+            series: [
+              { field: 'receita', label: 'Receita', type: 'line' },
+              { field: 'despesa', label: 'Despesa', type: 'line' },
+            ],
+            colors: ['#10B981', '#EF4444'],
+            legend: true,
+            tooltip: true,
+            responsive: true,
+          },
+        },
+        data: null,
+        order: 4,
+        visible: true,
+        locked: false,
+      },
+    ],
+    layout: {
+      width: 800,
+      height: 700,
+      gridSize: 20,
+      sections: [
+        {
+          id: 'header',
+          title: 'Cabeçalho',
+          type: 'header',
+          elements: ['financial-title'],
+          order: 0,
+          visible: true,
+        },
+        {
+          id: 'metrics',
+          title: 'Métricas Financeiras',
+          type: 'content',
+          elements: ['revenue', 'expenses', 'profit'],
+          order: 1,
+          visible: true,
+        },
+        {
+          id: 'charts',
+          title: 'Análise Gráfica',
+          type: 'content',
+          elements: ['financial-chart'],
+          order: 2,
+          visible: true,
+        },
+      ],
+      theme: 'light',
+      responsive: true,
+    },
+    tags: ['financeiro', 'receitas', 'despesas', 'lucro', 'gráficos'],
+  },
+  {
+    id: 'hr-dashboard',
+    name: 'Dashboard de RH',
+    description: 'Template para análise de recursos humanos com métricas de funcionários',
+    category: 'hr',
+    thumbnail: '/templates/hr-dashboard.png',
+    elements: [
+      {
+        id: 'hr-title',
+        type: 'text',
+        title: 'Dashboard de RH',
+        position: { x: 0, y: 0, z: 0 },
+        size: { width: 800, height: 60 },
+        config: {
+          textConfig: {
+            content: 'Dashboard de Recursos Humanos',
+            format: 'plain',
+            fontSize: 24,
+            fontWeight: 'bold',
+            align: 'center',
+            color: '#1F2937',
+          },
+        },
+        data: null,
+        order: 0,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'total-employees',
+        type: 'metric',
+        title: 'Total de Funcionários',
+        position: { x: 0, y: 80, z: 0 },
+        size: { width: 200, height: 100 },
+        config: {
+          metricConfig: {
+            value: 0,
+            label: 'Total de Funcionários',
+            unit: 'pessoas',
+            format: 'number',
+          },
+        },
+        data: null,
+        order: 1,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'avg-salary',
+        type: 'metric',
+        title: 'Salário Médio',
+        position: { x: 220, y: 80, z: 0 },
+        size: { width: 200, height: 100 },
+        config: {
+          metricConfig: {
+            value: 0,
+            label: 'Salário Médio',
+            unit: 'R$',
+            format: 'currency',
+          },
+        },
+        data: null,
+        order: 2,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'avg-performance',
+        type: 'metric',
+        title: 'Performance Média',
+        position: { x: 440, y: 80, z: 0 },
+        size: { width: 200, height: 100 },
+        config: {
+          metricConfig: {
+            value: 0,
+            label: 'Performance Média',
+            unit: '/5',
+            format: 'number',
+          },
+        },
+        data: null,
+        order: 3,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'department-chart',
+        type: 'chart',
+        title: 'Distribuição por Departamento',
+        position: { x: 0, y: 200, z: 0 },
+        size: { width: 400, height: 300 },
+        config: {
+          chartType: 'pie',
+          chartConfig: {
+            chartType: 'pie',
+            xAxis: { field: 'departamento', label: 'Departamento', type: 'category' },
+            yAxis: { field: 'funcionarios', label: 'Funcionários', type: 'number' },
+            series: [{ field: 'funcionarios', label: 'Funcionários' }],
+            colors: ['#8B5CF6', '#EC4899', '#F59E0B', '#10B981', '#3B82F6'],
+            legend: true,
+            tooltip: true,
+            responsive: true,
+          },
+        },
+        data: null,
+        order: 4,
+        visible: true,
+        locked: false,
+      },
+      {
+        id: 'hr-table',
+        type: 'table',
+        title: 'Lista de Funcionários',
+        position: { x: 420, y: 200, z: 0 },
+        size: { width: 380, height: 300 },
+        config: {
+          tableConfig: {
+            columns: [
+              { field: 'nome', header: 'Nome', type: 'text', sortable: true, filterable: true, width: 150 },
+              { field: 'cargo', header: 'Cargo', type: 'text', sortable: true, filterable: true, width: 120 },
+              { field: 'departamento', header: 'Dept.', type: 'text', sortable: true, filterable: true, width: 100 },
+              { field: 'salario', header: 'Salário', type: 'currency', sortable: true, filterable: true, width: 100 },
+            ],
+            pagination: true,
+            pageSize: 8,
+            sorting: true,
+            filtering: true,
+            exportable: true,
+          },
+        },
+        data: null,
+        order: 5,
+        visible: true,
+        locked: false,
+      },
+    ],
+    layout: {
+      width: 800,
+      height: 600,
+      gridSize: 20,
+      sections: [
+        {
+          id: 'header',
+          title: 'Cabeçalho',
+          type: 'header',
+          elements: ['hr-title'],
+          order: 0,
+          visible: true,
+        },
+        {
+          id: 'metrics',
+          title: 'Métricas de RH',
+          type: 'content',
+          elements: ['total-employees', 'avg-salary', 'avg-performance'],
+          order: 1,
+          visible: true,
+        },
+        {
+          id: 'analysis',
+          title: 'Análise',
+          type: 'content',
+          elements: ['department-chart', 'hr-table'],
+          order: 2,
+          visible: true,
+        },
+      ],
+      theme: 'light',
+      responsive: true,
+    },
+    tags: ['rh', 'funcionários', 'departamentos', 'salários', 'performance'],
+  },
+];
+
+// Função para obter template por ID
+export const getTemplateById = (id: string): ReportTemplate | undefined => {
+  return reportTemplates.find(template => template.id === id);
+};
+
+// Função para obter templates por categoria
+export const getTemplatesByCategory = (category: string): ReportTemplate[] => {
+  return reportTemplates.filter(template => template.category === category);
+};
+
+// Função para obter todos os templates
+export const getAllTemplates = (): ReportTemplate[] => {
+  return reportTemplates;
+};
+
+// Função para aplicar template a um relatório existente
+export const applyTemplate = (
+  template: ReportTemplate,
+  reportId: string,
+  reportName?: string
+) => {
+  return {
+    ...template,
+    id: reportId,
+    name: reportName || template.name,
+    elements: template.elements.map(element => ({
+      ...element,
+      id: `${element.id}_${Date.now()}`,
+    })),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    status: 'draft' as const,
+    createdBy: 'Sistema',
+  };
+};

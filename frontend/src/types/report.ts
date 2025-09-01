@@ -1,3 +1,5 @@
+// ===== INTERFACES EXISTENTES =====
+
 export interface ReportData {
   id: string;
   name: string;
@@ -159,4 +161,167 @@ export interface TableData {
   pageSize: number;
   sortField?: string;
   sortDirection?: 'asc' | 'desc';
+}
+
+// ===== INTERFACES PARA O CONSTRUTOR DE RELATÓRIOS =====
+
+export interface ReportBuilder {
+  id: string;
+  name: string;
+  description: string;
+  dataSource: string;
+  layout: ReportBuilderLayout;
+  elements: ReportElement[];
+  filters: ReportBuilderFilter[];
+  groupings: ReportBuilderGrouping[];
+  status: 'draft' | 'published' | 'archived';
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+}
+
+export interface ReportBuilderLayout {
+  width: number;
+  height: number;
+  gridSize: number;
+  sections: ReportBuilderSection[];
+  theme: 'light' | 'dark';
+  responsive: boolean;
+}
+
+export interface ReportBuilderSection {
+  id: string;
+  title: string;
+  type: 'header' | 'content' | 'footer';
+  elements: string[]; // IDs dos elementos
+  order: number;
+  visible: boolean;
+}
+
+export interface ReportElement {
+  id: string;
+  type: 'field' | 'table' | 'chart' | 'metric' | 'text' | 'filter' | 'grouping';
+  title: string;
+  position: ElementPosition;
+  size: ElementSize;
+  config: ElementConfig;
+  data: any;
+  order: number;
+  visible: boolean;
+  locked: boolean;
+}
+
+export interface ElementPosition {
+  x: number;
+  y: number;
+  z: number;
+}
+
+export interface ElementSize {
+  width: number;
+  height: number;
+  minWidth?: number;
+  minHeight?: number;
+  maxWidth?: number;
+  maxHeight?: number;
+}
+
+export interface ElementConfig {
+  field?: string;
+  chartType?: 'bar' | 'line' | 'pie' | 'area' | 'scatter';
+  tableConfig?: Partial<TableConfig>;
+  chartConfig?: Partial<ChartConfig>;
+  metricConfig?: Partial<MetricConfig>;
+  textConfig?: Partial<TextConfig>;
+  filterConfig?: FilterConfig;
+  groupingConfig?: GroupingConfig;
+}
+
+export interface FilterConfig {
+  field: string;
+  operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'between' | 'in' | 'not_in';
+  value: any;
+  value2?: any; // Para operadores como 'between'
+  enabled: boolean;
+}
+
+export interface GroupingConfig {
+  field: string;
+  order: 'asc' | 'desc';
+  level: number;
+  enabled: boolean;
+}
+
+export interface ReportBuilderFilter {
+  id: string;
+  field: string;
+  label: string;
+  type: 'text' | 'number' | 'date' | 'select' | 'multiselect';
+  value: any;
+  options?: FilterOption[];
+  validation?: FilterValidation;
+  enabled: boolean;
+}
+
+export interface ReportBuilderGrouping {
+  id: string;
+  field: string;
+  label: string;
+  type: 'field' | 'date' | 'numeric';
+  order: 'asc' | 'desc';
+  level: number;
+  enabled: boolean;
+}
+
+export interface ReportBuilderProps {
+  reportId?: string;
+  reportData?: ReportBuilder;
+  onSave?: (report: ReportBuilder) => void;
+  onPreview?: () => void;
+  onExport?: () => void;
+  readOnly?: boolean;
+}
+
+export interface DragItem {
+  id: string;
+  type: string;
+  data: any;
+  source: 'toolbox' | 'canvas';
+}
+
+export interface DropResult {
+  id: string;
+  position: ElementPosition;
+  targetId?: string;
+  success: boolean;
+}
+
+export interface ReportTemplate {
+  id: string;
+  name: string;
+  description: string;
+  category: 'sales' | 'financial' | 'hr' | 'marketing' | 'custom';
+  thumbnail: string;
+  elements: ReportElement[];
+  layout: ReportBuilderLayout;
+  tags: string[];
+}
+
+export interface ToolboxItem {
+  id: string;
+  type: string;
+  label: string;
+  description: string;
+  icon: string;
+  category: 'fields' | 'visualizations' | 'filters' | 'groupings' | 'templates';
+  draggable: boolean;
+  data: any;
+}
+
+export interface CanvasDropZone {
+  id: string;
+  accepts: string[];
+  position: ElementPosition;
+  size: ElementSize;
+  highlight: boolean;
 }
