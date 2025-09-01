@@ -32,6 +32,13 @@ const defaultNavigationItems: NavigationItem[] = [
     active: false,
   },
   {
+    id: 'report-preview',
+    label: 'Preview',
+    path: '/report-preview',
+    icon: 'Eye',
+    active: false,
+  },
+  {
     id: 'data-sources',
     label: 'Fontes de Dados',
     path: '/data-sources',
