@@ -1,6 +1,19 @@
 import React, { useState } from 'react';
-import { Menu, Search, Bell, User, LogOut, Settings } from 'lucide-react';
-import { HeaderProps } from '../../types/layout';
+import { 
+  Menu, 
+  Search, 
+  Bell, 
+  User, 
+  LogOut, 
+  Settings, 
+  BarChart3, 
+  FileText, 
+  HelpCircle, 
+  Download,
+  Share2,
+  Filter
+} from 'lucide-react';
+import type { HeaderProps } from '../../types/layout';
 
 export const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearch, user }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -41,28 +54,57 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearch, user }) 
           </div>
         </div>
 
-        {/* Center - Search */}
-        <div className="flex-1 max-w-md mx-4 hidden md:block">
-          <form onSubmit={handleSearch} className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Buscar relatórios..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            />
-          </form>
+        {/* Center - Search and Quick Actions */}
+        <div className="flex-1 max-w-2xl mx-4 hidden md:flex items-center space-x-4">
+          {/* Search */}
+          <div className="flex-1 max-w-md">
+            <form onSubmit={handleSearch} className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar relatórios..."
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              />
+            </form>
+          </div>
+
+          {/* Quick Action Buttons */}
+          <div className="flex items-center space-x-2">
+            <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500" title="Filtros">
+              <Filter className="h-5 w-5" />
+            </button>
+            <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500" title="Dashboard">
+              <BarChart3 className="h-5 w-5" />
+            </button>
+            <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500" title="Relatórios">
+              <FileText className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
-        {/* Right side - Notifications and User */}
+        {/* Right side - Notifications, Actions and User */}
         <div className="flex items-center space-x-3">
+          {/* Action Buttons */}
+          <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500" title="Exportar">
+            <Download className="h-5 w-5" />
+          </button>
+          <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500" title="Compartilhar">
+            <Share2 className="h-5 w-5" />
+          </button>
+
           {/* Notifications */}
-          <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 relative">
+          <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 relative" title="Notificações">
             <Bell className="h-6 w-6" />
             <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-red-400"></span>
+          </button>
+
+          {/* Help */}
+          <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500" title="Ajuda">
+            <HelpCircle className="h-5 w-5" />
           </button>
 
           {/* User Menu */}
@@ -101,20 +143,33 @@ export const Header: React.FC<HeaderProps> = ({ onMenuToggle, onSearch, user }) 
         </div>
       </div>
 
-      {/* Mobile Search */}
+      {/* Mobile Search and Actions */}
       <div className="mt-3 md:hidden">
-        <form onSubmit={handleSearch} className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-gray-400" />
+        <div className="flex items-center space-x-2">
+          {/* Mobile Search */}
+          <div className="flex-1">
+            <form onSubmit={handleSearch} className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar relatórios..."
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+              />
+            </form>
           </div>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Buscar relatórios..."
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-          />
-        </form>
+          
+          {/* Mobile Quick Actions */}
+          <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500" title="Filtros">
+            <Filter className="h-5 w-5" />
+          </button>
+          <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500" title="Dashboard">
+            <BarChart3 className="h-5 w-5" />
+          </button>
+        </div>
       </div>
     </header>
   );
