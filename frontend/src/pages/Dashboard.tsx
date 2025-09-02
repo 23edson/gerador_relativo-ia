@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   FileText, 
   Database, 
@@ -8,8 +8,11 @@ import {
   Users,
   PlusCircle
 } from 'lucide-react';
+import { Calendar } from '../components/common';
 
 export const Dashboard: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
   const stats = [
     {
       title: 'Total de Relatórios',
@@ -52,6 +55,12 @@ export const Dashboard: React.FC = () => {
     { id: 4, name: 'Relatório de RH', status: 'Pendente', date: '2024-01-12' },
   ];
 
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date);
+    // Aqui você pode adicionar lógica para filtrar dados baseado na data selecionada
+    console.log('Data selecionada:', date);
+  };
+
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
@@ -85,6 +94,95 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Widgets Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Calendar Widget */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Seletor de Data</h3>
+          <Calendar
+            value={selectedDate}
+            onChange={handleDateChange}
+            label="Data para Filtros"
+            supportingText="Selecione uma data para filtrar os relatórios"
+          />
+          {selectedDate && (
+            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-600">Data selecionada:</p>
+              <p className="font-medium text-gray-900">
+                {selectedDate.toLocaleDateString('pt-BR', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Activity Widget */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Atividade Recente</h3>
+          <div className="space-y-3">
+            <div className="flex items-center space-x-3">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="flex-1">
+                <p className="text-sm text-gray-900">Relatório de Vendas gerado</p>
+                <p className="text-xs text-gray-500">2 horas atrás</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <div className="flex-1">
+                <p className="text-sm text-gray-900">Nova fonte de dados conectada</p>
+                <p className="text-xs text-gray-500">4 horas atrás</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <div className="flex-1">
+                <p className="text-sm text-gray-900">Template atualizado</p>
+                <p className="text-xs text-gray-500">1 dia atrás</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Performance Widget */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Performance</h3>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-sm text-gray-600">Relatórios Concluídos</span>
+                <span className="text-sm font-medium text-gray-900">85%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-green-500 h-2 rounded-full" style={{ width: '85%' }}></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-sm text-gray-600">Tempo de Resposta</span>
+                <span className="text-sm font-medium text-gray-900">92%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-blue-500 h-2 rounded-full" style={{ width: '92%' }}></div>
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-sm text-gray-600">Satisfação</span>
+                <span className="text-sm font-medium text-gray-900">96%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-purple-500 h-2 rounded-full" style={{ width: '96%' }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Recent Reports */}
